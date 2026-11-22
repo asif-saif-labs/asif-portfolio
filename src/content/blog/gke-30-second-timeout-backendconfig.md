@@ -3,7 +3,7 @@ title: "GKE: the 30-second timeout was the load balancer, not the app"
 description: "Long API calls returned 502 and websockets dropped after about 30 seconds on GKE. The cause was the load balancer's default backend timeout."
 date: 2026-11-22
 tags: [gcp, gke, kubernetes, argocd, load-balancing]
-draft: true
+draft: false
 ---
 
 On a QA environment of an internal AI product running on GKE, some API calls

@@ -3,7 +3,7 @@ title: "Quarterly cost reviews across 10 AWS accounts: what actually showed up"
 description: "What a quarterly AWS cost review across about 10 accounts turned up: untagged databases, oversized Aurora, idle services and EKS extended support."
 date: 2026-11-22
 tags: [aws, finops, cost-optimization, rds, eks]
-draft: true
+draft: false
 ---
 
 Every quarter at work I go through the AWS bill for about 10 accounts and

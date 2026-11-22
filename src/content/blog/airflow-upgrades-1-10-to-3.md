@@ -3,7 +3,7 @@ title: "Four years of Airflow upgrades: 1.10 to 3.2"
 description: "Upgrading Airflow from 1.10 through 2.x, moving it from EC2 to ECS, and standing up Airflow 3.2. What each jump taught me."
 date: 2026-11-22
 tags: [airflow, data-engineering, aws, ecs, upgrades]
-draft: true
+draft: false
 ---
 
 I've upgraded Airflow more times than I've upgraded anything else at work.

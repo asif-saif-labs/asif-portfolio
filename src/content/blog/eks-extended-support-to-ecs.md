@@ -3,7 +3,7 @@ title: "Getting off EKS extended support: why we moved a product to ECS"
 description: "A product stuck on EKS 1.24 was costing $744 a month in extended support. Instead of a chain of upgrades, we moved its six services to ECS."
 date: 2026-11-22
 tags: [aws, eks, ecs, kubernetes, cost]
-draft: true
+draft: false
 ---
 
 At work, one product was still running on an EKS 1.24 cluster long after 1.24

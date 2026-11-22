@@ -3,7 +3,7 @@ title: "Splitting environments off a shared ALB with Terraform, without recreati
 description: "Moving UAT and a playground environment to their own load balancer with terraform state mv and an import block, and the production move that didn't go as smoothly."
 date: 2026-11-22
 tags: [terraform, aws, alb, ecs]
-draft: true
+draft: false
 ---
 
 At work, several environments of a client app sat behind one shared

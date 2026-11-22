@@ -3,7 +3,7 @@ title: "Triaging 20 NOC alerts in an afternoon: what was behind the ALB 503s"
 description: "I traced about 20 alert tickets read-only. Most 503s came from listener rules pointing at empty target groups. Here is how I triaged them."
 date: 2026-11-22
 tags: [aws, alb, monitoring, incident-response]
-draft: true
+draft: false
 ---
 
 At work, alerts from our monitoring land as tickets in a NOC queue. One
