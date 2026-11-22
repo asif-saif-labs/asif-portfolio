@@ -1,60 +1,64 @@
 ---
 import Base from "../layouts/Base.astro";
-import Prompt from "../components/Prompt.astro";
-import { profile } from "../data/profile";
-import { getPosts, lsDate } from "../lib";
+import PostCard from "../components/PostCard.astro";
+import { experience, profile, stackHighlights, stats } from "../data/profile";
+import { getPosts } from "../lib";
 
-const posts = (await getPosts()).slice(0, 5);
-const banner = String.raw`
-    _        _  __   _  __ _
-   / \   ___(_)/ _| | |/ /| |__   __ _ _ __
-  / _ \ / __| | |_  | ' / | '_ \ / _' | '_ \
- / ___ \\__ \ |  _| | . \ | | | | (_| | | | |
-/_/   \_\___/_|_|   |_|\_\|_| |_|\__,_|_| |_|
-`;
+const posts = (await getPosts()).slice(0, 6);
+const roleSummary = experience.map((r) => ({ ...r, summary: r.highlights.slice(0, 2).join(" ") }));
 ---
 <Base>
-  <pre class="ascii" aria-hidden="true">{banner}</pre>
-
-  <Prompt as="h1" cmd="whoami" />
-  <div class="out">
-    <p style="margin:0"><span class="amber">{profile.name}</span> · {profile.role} · {profile.location}</p>
-    <p style="margin:0" class="green">{profile.tagline}</p>
-    <p style="margin:8px 0 0">{profile.summary}</p>
+  <div class="hero">
+    <div>
+      <span class="label">{profile.role} · {profile.location}</span>
+      <h1>{profile.tagline}</h1>
+      <p>{profile.summary}</p>
+      <div class="links">
+        <a class="btn primary" href={profile.links.linkedin}>LinkedIn</a>
+        <a class="btn" href={profile.links.github}>GitHub</a>
+        <a class="btn" href="/blog/">Read the blog</a>
+      </div>
+    </div>
+    <aside class="spec" aria-label="Summary">
+      <div class="h label">Spec sheet</div>
+      <dl class="num">
+        <dt>role</dt><dd>{profile.role}</dd>
+        <dt>location</dt><dd>{profile.location}</dd>
+        {stats.slice(0, 3).map(([k, v]) => (<><dt>{k}</dt><dd>{v}</dd></>))}
+        <dt>contact</dt><dd><a href={`mailto:${profile.links.email}`}>{profile.links.email}</a></dd>
+      </dl>
+    </aside>
   </div>
 
-  <Prompt cmd="cat ~/.status" />
-  <div class="out">
-    <p style="margin:0"><span class="green">working</span>    AI platform infrastructure on AWS and GCP</p>
-  </div>
+  <section>
+    <span class="label">Career</span>
+    <h2>Experience</h2>
+    <div class="timeline">
+      {roleSummary.map((r) => (
+        <div class="node">
+          <span class="when">{r.years}</span>
+          <h3>{r.title} · {r.org}</h3>
+          <p>{r.summary}</p>
+        </div>
+      ))}
+    </div>
+    <p style="margin:14px 0 0"><a href="/about/">Full experience and education →</a></p>
+  </section>
 
-  <Prompt cmd="ls -lt ~/blog | head -5" />
-  <div class="out scroll">
+  <section>
+    <span class="label">Toolchain</span>
+    <h2>Stack</h2>
+    <div class="stack">{stackHighlights.map((s) => <span>{s}</span>)}</div>
+  </section>
+
+  <section>
+    <span class="label">Notes</span>
+    <h2>Latest writing</h2>
     {posts.length === 0 ? (
-      <p class="muted">total 0</p>
+      <p class="muted">First post coming soon.</p>
     ) : (
-      <table class="tbl">
-        <tbody>
-          {posts.map((p) => (
-            <tr>
-              <td class="muted nowrap">-rw-r--r--</td>
-              <td class="muted nowrap">{lsDate(p.data.date)}</td>
-              <td><a href={`/blog/${p.id}/`}>{p.id}.md</a></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div class="cards">{posts.map((p) => <PostCard post={p} />)}</div>
     )}
-    <p style="margin:8px 0 0"><a href="/blog/">→ all posts</a></p>
-  </div>
-
-  <Prompt cmd="ls ~/links" />
-  <div class="out">
-    <a href={profile.links.github}>github</a>&nbsp;&nbsp;
-    <a href={profile.links.linkedin}>linkedin</a>&nbsp;&nbsp;
-    <a href={`mailto:${profile.links.email}`}>email</a>&nbsp;&nbsp;
-    <a href={profile.links.rss}>rss</a>
-  </div>
-
-  <Prompt cmd="" /><span class="cursor" aria-hidden="true"></span>
+    <p style="margin:14px 0 0"><a href="/blog/">All posts →</a></p>
+  </section>
 </Base>

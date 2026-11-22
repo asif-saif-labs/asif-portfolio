@@ -1,0 +1,17 @@
+---
+import { lsDate, readMinutes, type Post } from "../lib";
+
+interface Props {
+  post: Post;
+  showDescription?: boolean;
+}
+const { post, showDescription = false } = Astro.props;
+---
+<article class="card">
+  <span class="meta">{lsDate(post.data.date)} · {readMinutes(post.body)} min read</span>
+  <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+  {showDescription && <p>{post.data.description}</p>}
+  {post.data.tags.length > 0 && (
+    <div class="tags">{post.data.tags.map((t) => <a class="tag" href={`/blog/tags/${t}/`}>#{t}</a>)}</div>
+  )}
+</article>

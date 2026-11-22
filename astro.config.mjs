@@ -5,6 +5,11 @@ export default defineConfig({
   site: "https://asif.aslabs.co.in",
   integrations: [sitemap()],
   markdown: {
-    shikiConfig: { theme: "github-dark-dimmed", wrap: false },
+    // Light and dark code themes; global.css picks one to match the site theme.
+    shikiConfig: {
+      themes: { light: "github-light", dark: "github-dark-dimmed" },
+      defaultColor: false,
+      wrap: false,
+    },
   },
 });

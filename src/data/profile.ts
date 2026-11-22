@@ -25,14 +25,14 @@ export const profile = {
   },
 };
 
-// Rendered like `cat /proc/career`. Approximate, from GitHub and Jira history.
-export const stats = [
-  ["years_in_devops", "4.5+"],
-  ["pull_requests", "~1,780"],
-  ["terraform_commits", "~1,770"],
-  ["pipeline_commits", "~1,500"],
-  ["tickets_delivered", "~1,400"],
-  ["clouds", "aws, gcp"],
+// The spec sheet. Approximate, from GitHub and Jira history.
+export const stats: [string, string][] = [
+  ["experience", "4.5+ years"],
+  ["clouds", "AWS, GCP"],
+  ["pull requests", "~1,780"],
+  ["terraform commits", "~1,770"],
+  ["pipeline commits", "~1,500"],
+  ["tickets delivered", "~1,400"],
 ];
 
 // Rendered like `git log --oneline --graph`: newest first.
@@ -90,16 +90,19 @@ export const education = [
   },
 ];
 
-// Rendered like `terraform state list`. Ordered by depth of experience.
+// Grouped stack for the About page. Ordered by depth of experience.
 export const skills: Record<string, string[]> = {
-  aws: ["ecs", "ec2", "lambda", "vpc", "alb", "cloudfront", "route53", "waf", "iam", "kms", "rds_aurora", "redshift", "elasticache", "s3", "msk", "cloudwatch", "bedrock"],
-  gcp: ["gke", "cloud_run", "composer", "bigquery", "artifact_registry", "secret_manager", "workload_identity"],
-  iac: ["terraform", "terraform_okta", "cloudformation"],
-  cicd: ["github_actions", "arc_runners", "jenkins", "sonarqube", "argo_cd", "oidc"],
-  containers: ["docker", "eks", "gke", "karpenter", "helm", "kustomize"],
-  data: ["airflow", "celery", "kafka", "redshift", "bigquery", "glue"],
-  observability: ["grafana", "prometheus", "loki", "cloudwatch", "sentry", "langfuse"],
-  security: ["okta", "keycloak", "waf", "kms", "qualys", "cve_remediation"],
-  ai_platform: ["litellm", "mcp_gateway", "langfuse", "gpu_workloads", "bedrock"],
-  languages: ["bash", "python", "sql", "hcl", "yaml", "groovy"],
+  AWS: ["ECS", "EC2", "Lambda", "VPC", "ALB", "CloudFront", "Route 53", "WAF", "IAM", "KMS", "RDS / Aurora", "Redshift", "ElastiCache", "S3", "MSK", "CloudWatch", "Bedrock"],
+  GCP: ["GKE", "Cloud Run", "Composer", "BigQuery", "Artifact Registry", "Secret Manager", "Workload Identity"],
+  "Infra as code": ["Terraform", "Terraform (Okta)", "CloudFormation"],
+  "CI/CD": ["GitHub Actions", "ARC runners", "Jenkins", "SonarQube", "Argo CD", "OIDC"],
+  Containers: ["Docker", "EKS", "GKE", "Karpenter", "Helm", "Kustomize"],
+  Data: ["Airflow", "Celery", "Kafka", "Redshift", "BigQuery", "Glue"],
+  Observability: ["Grafana", "Prometheus", "Loki", "CloudWatch", "Sentry", "Langfuse"],
+  Security: ["Okta", "Keycloak", "WAF", "KMS", "Qualys", "CVE remediation"],
+  "AI platform": ["LiteLLM", "MCP gateway", "Langfuse", "GPU workloads", "Bedrock"],
+  Languages: ["Bash", "Python", "SQL", "HCL", "YAML", "Groovy"],
 };
+
+// Short list for the home page.
+export const stackHighlights = ["AWS", "GCP", "Terraform", "GitHub Actions", "Jenkins", "Kubernetes (EKS, GKE)", "ECS", "Docker", "Airflow", "Grafana", "Python", "Bash"];
