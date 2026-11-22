@@ -3,7 +3,39 @@
 Personal site and weekly DevOps blog for Asif Khan. Terminal-style, static,
 hosted on AWS for a few rupees a month.
 
-> Status: **planning**. This README is the plan; code comes next.
+> Status: **milestone 1 built** (site + CI/CD). Infra: `aslabs-infra/apps/portfolio`.
+
+## Develop
+
+```bash
+npm install
+npm run dev        # http://localhost:4321
+npm run build      # static site in dist/
+```
+
+No Node on your machine? Use Docker:
+
+```bash
+docker run --rm -it -v "$PWD":/app -w /app -p 4321:4321 node:22-alpine \
+  sh -c "npm install && npx astro dev --host"
+```
+
+- Personal details: `src/data/profile.ts` (replace the `TODO`s).
+- Projects table: `src/data/projects.ts`.
+- New post: `src/content/blog/<slug>.md` with `title`, `description`, `date`,
+  `tags` (set `draft: true` to hide it from the built site).
+
+## CI/CD
+
+| Workflow | When | What |
+|---|---|---|
+| `ci.yml` | every PR to `main` | `npm ci`, build, offline link check (lychee) |
+| `deploy.yml` | every push/merge to `main` (or manual) | build → S3 sync (hashed assets cached 1 year, pages revalidated) → CloudFront invalidation |
+
+Deploy assumes an AWS role through GitHub OIDC, allowed only for this repo's
+`production` environment. Set these **repository variables** from
+`terraform output` in `aslabs-infra/apps/portfolio`: `AWS_DEPLOY_ROLE_ARN`,
+`SITE_BUCKET`, `CLOUDFRONT_ID`.
 
 ## Look and feel: "your shell, but a website"
 

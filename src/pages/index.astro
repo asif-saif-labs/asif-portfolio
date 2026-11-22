@@ -1,0 +1,61 @@
+---
+import Base from "../layouts/Base.astro";
+import Prompt from "../components/Prompt.astro";
+import { profile } from "../data/profile";
+import { getPosts, lsDate } from "../lib";
+
+const posts = (await getPosts()).slice(0, 5);
+const banner = String.raw`
+    _        _  __   _  __ _
+   / \   ___(_)/ _| | |/ /| |__   __ _ _ __
+  / _ \ / __| | |_  | ' / | '_ \ / _' | '_ \
+ / ___ \\__ \ |  _| | . \ | | | | (_| | | | |
+/_/   \_\___/_|_|   |_|\_\|_| |_|\__,_|_| |_|
+`;
+---
+<Base>
+  <pre class="ascii" aria-hidden="true">{banner}</pre>
+
+  <Prompt as="h1" cmd="whoami" />
+  <div class="out">
+    <p style="margin:0"><span class="amber">{profile.name}</span> · {profile.role} · {profile.location}</p>
+    <p style="margin:0" class="muted">{profile.tagline}</p>
+  </div>
+
+  <Prompt cmd="cat ~/.status" />
+  <div class="out">
+    <p style="margin:0"><span class="green">building</span>   fintrack, aslabs-infra and this site, with my brother</p>
+    <p style="margin:0"><span class="green">writing</span>    a DevOps post every week</p>
+    <p style="margin:0"><span class="green">learning</span>   whatever breaks next</p>
+  </div>
+
+  <Prompt cmd="ls -lt ~/blog | head -5" />
+  <div class="out scroll">
+    {posts.length === 0 ? (
+      <p class="muted">total 0</p>
+    ) : (
+      <table class="tbl">
+        <tbody>
+          {posts.map((p) => (
+            <tr>
+              <td class="muted nowrap">-rw-r--r--</td>
+              <td class="muted nowrap">{lsDate(p.data.date)}</td>
+              <td><a href={`/blog/${p.id}/`}>{p.id}.md</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+    <p style="margin:8px 0 0"><a href="/blog/">→ all posts</a></p>
+  </div>
+
+  <Prompt cmd="ls ~/links" />
+  <div class="out">
+    <a href={profile.links.github}>github</a>&nbsp;&nbsp;
+    <a href={profile.links.linkedin}>linkedin</a>&nbsp;&nbsp;
+    <a href={`mailto:${profile.links.email}`}>email</a>&nbsp;&nbsp;
+    <a href={profile.links.rss}>rss</a>
+  </div>
+
+  <Prompt cmd="" /><span class="cursor" aria-hidden="true"></span>
+</Base>

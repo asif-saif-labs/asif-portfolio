@@ -1,0 +1,12 @@
+---
+import Base from "../layouts/Base.astro";
+import Prompt from "../components/Prompt.astro";
+---
+<Base title="404" description="Page not found" path="~/404">
+  <Prompt as="h1" cmd="cd $REQUESTED_PAGE" />
+  <p class="out red">bash: cd: No such file or directory</p>
+  <Prompt cmd="echo $?" />
+  <p class="out">404</p>
+  <Prompt cmd="ls" />
+  <p class="out"><a href="/">home/</a>&nbsp;&nbsp;<a href="/blog/">blog/</a>&nbsp;&nbsp;<a href="/projects/">projects/</a>&nbsp;&nbsp;<a href="/about/">about/</a></p>
+</Base>
