@@ -20,7 +20,7 @@ export const profile = {
   links: {
     github: "https://github.com/asif3966",
     linkedin: "https://www.linkedin.com/in/asif-ali-khan-bba890176/",
-    email: "asif3966.islam@gmail.com",
+    email: "asifdevops3966@gmail.com",
     rss: "/rss.xml",
   },
 };
