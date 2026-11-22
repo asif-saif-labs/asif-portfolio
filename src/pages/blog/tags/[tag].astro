@@ -1,7 +1,7 @@
 ---
 import Base from "../../../layouts/Base.astro";
-import Prompt from "../../../components/Prompt.astro";
-import { getPosts, lsDate, type Post } from "../../../lib";
+import PostCard from "../../../components/PostCard.astro";
+import { getPosts, type Post } from "../../../lib";
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -15,19 +15,11 @@ interface Props {
 const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
-<Base title={`#${tag}`} description={`Posts tagged ${tag}`} path={`~/blog/tags/${tag}`}>
-  <Prompt as="h1" path="~/blog" cmd={`grep -l "tags:.*${tag}" *.md`} />
-  <div class="out scroll">
-    <table class="tbl">
-      <tbody>
-        {posts.map((p) => (
-          <tr>
-            <td class="muted nowrap">{lsDate(p.data.date)}</td>
-            <td><a href={`/blog/${p.id}/`}>{p.data.title}</a></td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-    <p style="margin:12px 0 0"><a href="/blog/">← all posts</a></p>
-  </div>
+<Base title={`#${tag}`} description={`Posts tagged ${tag}`}>
+  <section>
+    <span class="label">Tag · {posts.length} {posts.length === 1 ? "post" : "posts"}</span>
+    <h1 class="section-title" style="font-size:30px">#{tag}</h1>
+    <div class="cards">{posts.map((p) => <PostCard post={p} showDescription />)}</div>
+    <p style="margin:18px 0 0"><a href="/blog/">← All posts</a></p>
+  </section>
 </Base>

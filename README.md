@@ -1,6 +1,6 @@
 # asif-portfolio
 
-Personal site and weekly DevOps blog for Asif Khan. Terminal-style, static,
+Personal site and weekly DevOps blog for Asif Ali Khan. Blueprint-style, static,
 hosted on AWS for a few rupees a month.
 
 > Status: **milestone 1 built** (site + CI/CD). Infra: `aslabs-infra/apps/portfolio`.

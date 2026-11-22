@@ -1,82 +1,86 @@
 ---
+import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
-import Prompt from "../components/Prompt.astro";
+import portrait from "../assets/asif-portrait.jpg";
 import { education, experience, profile, skills, stats } from "../data/profile";
 ---
-<Base title="About" description={`About ${profile.name}: ${profile.role}, ${profile.location}`} path="~/about">
-  <Prompt as="h1" path="~" cmd="cat about.md" />
-  <div class="out">
-    {profile.bio.map((p) => <p style="margin:0 0 10px">{p}</p>)}
+<Base title="About" description={`About ${profile.name}: ${profile.role}, ${profile.location}`}>
+  <div class="hero">
+    <div class="bio">
+      <span class="label">About</span>
+      <h1>{profile.name}</h1>
+      {profile.bio.map((p) => <p>{p}</p>)}
+    </div>
+    <div class="about-side">
+      <Image class="portrait" src={portrait} alt={`Portrait of ${profile.name}`} width={480} widths={[360, 480, 720, 960]} sizes="(max-width: 760px) 100vw, 380px" loading="eager" />
+      <aside class="spec" aria-label="Career summary">
+        <div class="h label">By the numbers</div>
+        <dl class="num">{stats.map(([k, v]) => (<><dt>{k}</dt><dd>{v}</dd></>))}</dl>
+      </aside>
+    </div>
   </div>
 
-  <Prompt as="h2" path="~" cmd="cat /proc/career" />
-  <div class="out scroll">
-    <table class="tbl">
-      <tbody>
-        {stats.map(([k, v]) => (
-          <tr><td class="muted nowrap">{k}</td><td class="amber">{v}</td></tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-
-  <Prompt as="h2" path="~/career" cmd="git log --graph --format=role" />
-  <div class="out">
-    {experience.map((r, i) => (
-      <div style="margin:0 0 14px">
-        <div>
-          <span class="red">*</span> <span class="amber">{r.years}</span>{" "}
-          <span class="green">{r.title}</span> <span class="muted">@</span> {r.org}
+  <section>
+    <span class="label">Career</span>
+    <h2>Experience</h2>
+    <div class="timeline">
+      {experience.map((r) => (
+        <div class="node">
+          <span class="when">{r.years}</span>
+          <h3>{r.title} · {r.org}</h3>
+          <ul>{r.highlights.map((h) => <li>{h}</li>)}</ul>
         </div>
-        <ul style="margin:4px 0 0;padding-left:0;list-style:none">
-          {r.highlights.map((h) => (
-            <li style="display:flex;gap:8px">
-              <span class="muted" aria-hidden="true">{i < experience.length - 1 ? "|" : " "}</span>
-              <span>{h}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))}
-  </div>
+      ))}
+    </div>
+  </section>
 
-  <Prompt as="h2" path="~/education" cmd="ls -l" />
-  <div class="out">
-    {education.map((e) => (
-      <div style="margin:0 0 10px">
-        <span class="amber">{e.years}</span> <span class="green">{e.title}</span>{" "}
-        <span class="muted">@</span> {e.org}
-        {e.note && <div class="muted" style="font-size:13px">{e.note}</div>}
-      </div>
-    ))}
-  </div>
+  <section>
+    <span class="label">Education</span>
+    <h2>Education</h2>
+    <div class="timeline">
+      {education.map((e) => (
+        <div class="node">
+          <span class="when">{e.years}</span>
+          <h3>{e.title}</h3>
+          <p>{e.org}</p>
+          {e.note && <p>{e.note}</p>}
+        </div>
+      ))}
+    </div>
+  </section>
 
-  <Prompt as="h2" path="~/skills" cmd="terraform state list" />
-  <div class="out">
-    {Object.entries(skills).map(([group, items]) => (
-      <div style="margin:0 0 6px">
-        {items.map((s, i) => (
-          <span style="white-space:nowrap">
-            <span class="muted">module.{group}.</span><span class="cyan">{s}</span>{i < items.length - 1 ? "  " : ""}
-          </span>
-        ))}
-      </div>
-    ))}
-  </div>
+  <section>
+    <span class="label">Toolchain</span>
+    <h2>Stack</h2>
+    <div class="stack-groups">
+      {Object.entries(skills).map(([group, items]) => (
+        <div class="g">
+          <span class="label" style="padding-top:4px">{group}</span>
+          <div class="stack">{items.map((s) => <span>{s}</span>)}</div>
+        </div>
+      ))}
+    </div>
+  </section>
 
-  <Prompt as="h2" path="~/asif-portfolio" cmd="cat README.md | head -3" />
-  <div class="out">
-    <p style="margin:0">This site is static HTML built with Astro, served from a private S3 bucket through CloudFront.</p>
-    <p style="margin:0">The infrastructure is Terraform; every merge to main deploys from GitHub Actions with keyless OIDC.</p>
-    <p style="margin:0"><a href="https://github.com/asif-saif-labs/asif-portfolio">→ source on GitHub</a></p>
-  </div>
+  <section id="contact">
+    <span class="label">Contact</span>
+    <h2>Get in touch</h2>
+    <div class="spec" style="max-width:560px">
+      <dl>
+        <dt>email</dt><dd><a href={`mailto:${profile.links.email}`}>{profile.links.email}</a></dd>
+        <dt>linkedin</dt><dd><a href={profile.links.linkedin}>{profile.links.linkedin.replace("https://www.", "")}</a></dd>
+        <dt>github</dt><dd><a href={profile.links.github}>{profile.links.github.replace("https://", "")}</a></dd>
+      </dl>
+    </div>
+  </section>
 
-  <Prompt as="h2" path="~" cmd="curl -s asif/contact" />
-  <div class="out" id="contact">
-    <pre style="margin:0;white-space:pre-wrap">{`{
-  "email":    "`}<a href={`mailto:${profile.links.email}`}>{profile.links.email}</a>{`",
-  "github":   "`}<a href={profile.links.github}>{profile.links.github}</a>{`",
-  "linkedin": "`}<a href={profile.links.linkedin}>{profile.links.linkedin}</a>{`"
-}`}</pre>
-  </div>
+  <section>
+    <span class="label">This site</span>
+    <h2>How it's built</h2>
+    <p class="muted" style="margin:0;max-width:68ch">
+      Static HTML from Astro, served from a private S3 bucket through CloudFront. The infrastructure is
+      Terraform, and every merge to main deploys from GitHub Actions with keyless OIDC.
+      <a href="https://github.com/asif-saif-labs/asif-portfolio">Source on GitHub →</a>
+    </p>
+  </section>
 </Base>

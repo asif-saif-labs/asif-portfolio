@@ -1,8 +1,7 @@
 ---
 import { render } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import Prompt from "../../components/Prompt.astro";
-import { getPosts, isoDate, readMinutes, type Post } from "../../lib";
+import { getPosts, isoDate, lsDate, readMinutes, type Post } from "../../lib";
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -20,19 +19,22 @@ interface Props {
 const { post, newer, older } = Astro.props;
 const { Content } = await render(post);
 ---
-<Base title={post.data.title} description={post.data.description} path={`~/blog/${post.id}.md`}>
-  <Prompt path="~/blog" cmd={`cat ${post.id}.md`} />
-  <article class="post">
-    <h1>{post.data.title}</h1>
-    <p class="muted" style="margin:0 0 4px;font-size:13px">
-      <time datetime={isoDate(post.data.date)}>{isoDate(post.data.date)}</time> · {readMinutes(post.body)} min read
-    </p>
-    <p style="margin:0 0 24px">{post.data.tags.map((t) => <a class="tag" href={`/blog/tags/${t}/`}>--tag={t}</a>)}</p>
-    <Content />
+<Base title={post.data.title} description={post.data.description} type="article">
+  <article class="article">
+    <header>
+      <a class="label" href="/blog/">← Writing</a>
+      <h1>{post.data.title}</h1>
+      <p class="meta">
+        <time datetime={isoDate(post.data.date)}>{lsDate(post.data.date)}</time> · {readMinutes(post.body)} min read
+      </p>
+      <div class="tags">{post.data.tags.map((t) => <a class="tag" href={`/blog/tags/${t}/`}>#{t}</a>)}</div>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+    <nav class="post-nav" aria-label="More posts">
+      <span>{newer && <a href={`/blog/${newer.id}/`}>← {newer.data.title}</a>}</span>
+      <span>{older && <a href={`/blog/${older.id}/`}>{older.data.title} →</a>}</span>
+    </nav>
   </article>
-  <hr style="border:0;border-top:1px dashed var(--border);margin:32px 0 16px" />
-  <nav aria-label="More posts" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px">
-    <span>{newer && <a href={`/blog/${newer.id}/`}>← {newer.data.title}</a>}</span>
-    <span>{older && <a href={`/blog/${older.id}/`}>{older.data.title} →</a>}</span>
-  </nav>
 </Base>

@@ -1,69 +1,94 @@
 ---
-import "@fontsource/jetbrains-mono/400.css";
-import "@fontsource/jetbrains-mono/700.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/ibm-plex-mono/400.css";
 import "../styles/global.css";
-import Palette from "../components/Palette.astro";
+import { getImage } from "astro:assets";
+import avatar from "../assets/asif-avatar.jpg";
 import { profile } from "../data/profile";
+
+// Social preview image (LinkedIn, X, WhatsApp): JPEG for the widest support.
+const og = await getImage({ src: avatar, width: 800, height: 800, format: "jpg" });
 
 interface Props {
   title?: string;
   description?: string;
-  path?: string; // shown in the title bar, e.g. "~/blog"
+  type?: "website" | "article";
 }
-const { title, description = profile.tagline, path = "~" } = Astro.props;
-const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name}: ${profile.role}`;
+const { title, description = profile.summary, type = "website" } = Astro.props;
+const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name}, ${profile.role}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(og.src, Astro.site).href;
 const here = Astro.url.pathname;
 const nav = [
-  ["/", "home"],
-  ["/blog/", "blog"],
-  ["/about/", "about"],
+  ["/blog/", "/writing"],
+  ["/about/", "/about"],
+  ["/about/#contact", "/contact"],
 ];
-const isActive = (href: string) => (href === "/" ? here === "/" : here.startsWith(href));
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate" type="application/rss+xml" title={`${profile.name}'s blog`} href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${profile.name}'s writing`} href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#0b0f14" />
+    <meta property="og:type" content={type} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="800" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:alt" content={`Photo of ${profile.name}`} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#f5f8fc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b1a31" media="(prefers-color-scheme: dark)" />
     <script is:inline>
       try {
         const t = localStorage.getItem("theme");
-        if (t) document.documentElement.dataset.theme = t;
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
       } catch (e) {}
     </script>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <div class="term">
-      <div class="titlebar" aria-hidden="true">
-        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-        <span class="title">{profile.handle}@{profile.host}: {path}</span>
-      </div>
-      <nav class="cmds" aria-label="Main">
+    <header class="wrap site-nav">
+      <a class="brand" href="/">{profile.name}</a>
+      <nav aria-label="Main">
         {nav.map(([href, label]) => (
-          <a href={href} aria-current={isActive(href) ? "page" : undefined}>{label}</a>
+          <a href={href} aria-current={here.startsWith(href) && href !== "/about/#contact" ? "page" : undefined}>{label}</a>
         ))}
+        <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch light or dark theme">theme</button>
       </nav>
-      <main id="main">
-        <slot />
-      </main>
-      <footer class="status">
-        <span><span class="ok">● 200 OK</span> · {profile.name} · © {new Date().getFullYear()}</span>
-        <span>press <kbd>:</kbd> for commands · <a href="/rss.xml">rss</a> · <a href="https://github.com/asif-saif-labs/asif-portfolio">source</a></span>
-      </footer>
-    </div>
-    <Palette />
+    </header>
+    <main id="main" class="wrap">
+      <slot />
+    </main>
+    <footer class="wrap site-footer">
+      <span>© {new Date().getFullYear()} {profile.name} · {profile.location}</span>
+      <span>
+        <a href="/rss.xml">rss</a> · <a href="https://github.com/asif-saif-labs/asif-portfolio">source</a> · built with Terraform, S3 and CloudFront
+      </span>
+    </footer>
+    <script>
+      const btn = document.getElementById("theme-toggle");
+      const root = document.documentElement;
+      const current = () =>
+        root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      const label = () => { if (btn) btn.textContent = current() === "dark" ? "light" : "dark"; };
+      label();
+      btn?.addEventListener("click", () => {
+        const next = current() === "dark" ? "light" : "dark";
+        root.dataset.theme = next;
+        try { localStorage.setItem("theme", next); } catch (e) {}
+        label();
+      });
+    </script>
   </body>
 </html>
