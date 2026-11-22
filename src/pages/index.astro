@@ -1,5 +1,7 @@
 ---
+import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
+import avatar from "../assets/asif-avatar.jpg";
 import PostCard from "../components/PostCard.astro";
 import { experience, profile, stackHighlights, stats } from "../data/profile";
 import { getPosts } from "../lib";
@@ -20,7 +22,13 @@ const roleSummary = experience.map((r) => ({ ...r, summary: r.highlights.slice(0
       </div>
     </div>
     <aside class="spec" aria-label="Summary">
-      <div class="h label">Spec sheet</div>
+      <div class="who">
+        <Image src={avatar} alt={`Photo of ${profile.name}`} width={160} height={160} loading="eager" />
+        <div>
+          <strong>{profile.name}</strong>
+          <span class="label">Spec sheet</span>
+        </div>
+      </div>
       <dl class="num">
         <dt>role</dt><dd>{profile.role}</dd>
         <dt>location</dt><dd>{profile.location}</dd>

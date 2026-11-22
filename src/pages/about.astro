@@ -1,5 +1,7 @@
 ---
+import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
+import portrait from "../assets/asif-portrait.jpg";
 import { education, experience, profile, skills, stats } from "../data/profile";
 ---
 <Base title="About" description={`About ${profile.name}: ${profile.role}, ${profile.location}`}>
@@ -9,10 +11,13 @@ import { education, experience, profile, skills, stats } from "../data/profile";
       <h1>{profile.name}</h1>
       {profile.bio.map((p) => <p>{p}</p>)}
     </div>
-    <aside class="spec" aria-label="Career summary">
-      <div class="h label">By the numbers</div>
-      <dl class="num">{stats.map(([k, v]) => (<><dt>{k}</dt><dd>{v}</dd></>))}</dl>
-    </aside>
+    <div class="about-side">
+      <Image class="portrait" src={portrait} alt={`Portrait of ${profile.name}`} width={480} widths={[360, 480, 720, 960]} sizes="(max-width: 760px) 100vw, 380px" loading="eager" />
+      <aside class="spec" aria-label="Career summary">
+        <div class="h label">By the numbers</div>
+        <dl class="num">{stats.map(([k, v]) => (<><dt>{k}</dt><dd>{v}</dd></>))}</dl>
+      </aside>
+    </div>
   </div>
 
   <section>
