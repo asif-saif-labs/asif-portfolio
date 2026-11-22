@@ -32,13 +32,14 @@ export const projects: Project[] = [
   {
     name: "tf-drift-detector",
     status: "Completed",
-    stack: "python, terraform, bedrock",
-    description: "Dissertation: AI-assisted Terraform drift detection with tags-only remediation.",
+    stack: "python, terraform, bedrock, streamlit",
+    description:
+      "M.Tech dissertation: detects Terraform drift, classifies it and routes fixes. AI may only raise severity and sees redacted data. 15/15 injected drifts detected, 0 false positives.",
   },
   {
     name: "mosque-app",
     status: "Pending",
     stack: "django, react",
-    description: "Built with my brother. Details soon.",
+    description: "A community app. Details soon.",
   },
 ];
