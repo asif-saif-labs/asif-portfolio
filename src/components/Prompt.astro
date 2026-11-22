@@ -1,0 +1,14 @@
+---
+// A shell prompt line:  asif@aslabs:~/blog$ ls -lt
+import { profile } from "../data/profile";
+
+interface Props {
+  cmd: string;
+  path?: string;
+  as?: "h1" | "h2" | "p";
+}
+const { cmd, path = "~", as: Tag = "p" } = Astro.props;
+---
+<Tag class="prompt">
+  <span class="user">{profile.handle}@{profile.host}</span><span class="sym">:</span><span class="path">{path}</span><span class="sym">$ </span><span class="cmd">{cmd}</span>
+</Tag>

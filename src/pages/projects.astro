@@ -1,0 +1,29 @@
+---
+import Base from "../layouts/Base.astro";
+import Prompt from "../components/Prompt.astro";
+import { projects } from "../data/projects";
+
+const statusClass = { Running: "green", Building: "amber", Pending: "muted", Completed: "cyan" } as const;
+---
+<Base title="Projects" description="Things I'm building." path="~/projects">
+  <Prompt as="h1" path="~/projects" cmd="kubectl get projects -o wide" />
+  <div class="out scroll">
+    <table class="tbl">
+      <thead>
+        <tr><th>Name</th><th>Status</th><th>Stack</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        {projects.map((p) => (
+          <tr>
+            <td class="nowrap">{p.url || p.repo ? <a href={p.url || p.repo}>{p.name}</a> : p.name}</td>
+            <td class={`nowrap ${statusClass[p.status]}`}>{p.status}</td>
+            <td class="muted">{p.stack}</td>
+            <td>{p.description}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <Prompt path="~/projects" cmd="kubectl describe project asif-portfolio | grep Source" />
+  <p class="out">Source: <a href="https://github.com/asif-saif-labs/asif-portfolio">github.com/asif-saif-labs/asif-portfolio</a></p>
+</Base>

@@ -1,0 +1,38 @@
+---
+import Base from "../layouts/Base.astro";
+import Prompt from "../components/Prompt.astro";
+import { experience, profile, skills } from "../data/profile";
+---
+<Base title="About" description={`About ${profile.name}`} path="~/about">
+  <Prompt as="h1" path="~" cmd="cat about.md" />
+  <div class="out">
+    {profile.bio.map((p) => <p style="margin:0 0 8px">{p}</p>)}
+  </div>
+
+  <Prompt as="h2" path="~/career" cmd="git log --oneline --graph" />
+  <div class="out">
+    {experience.map((e, i) => (
+      <p style="margin:0">
+        <span class="red">*</span> <span class="amber">{e.year}</span>{" "}
+        <span class="green">{e.role}</span> <span class="muted">@</span> {e.org}
+        <br /><span class="muted">{i < experience.length - 1 ? "|" : " "}   {e.note}</span>
+      </p>
+    ))}
+  </div>
+
+  <Prompt as="h2" path="~/skills" cmd="terraform state list" />
+  <div class="out">
+    {Object.entries(skills).flatMap(([group, items]) =>
+      items.map((s) => <div><span class="muted">module.{group}.</span><span class="cyan">{s}</span></div>)
+    )}
+  </div>
+
+  <Prompt as="h2" path="~" cmd="curl -s asif/contact" />
+  <div class="out" id="contact">
+    <pre style="margin:0">{`{
+  "email":    "`}<a href={`mailto:${profile.links.email}`}>{profile.links.email}</a>{`",
+  "github":   "`}<a href={profile.links.github}>{profile.links.github}</a>{`",
+  "linkedin": "`}<a href={profile.links.linkedin}>{profile.links.linkedin}</a>{`"
+}`}</pre>
+  </div>
+</Base>

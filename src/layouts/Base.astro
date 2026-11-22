@@ -1,0 +1,70 @@
+---
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/700.css";
+import "../styles/global.css";
+import Palette from "../components/Palette.astro";
+import { profile } from "../data/profile";
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string; // shown in the title bar, e.g. "~/blog"
+}
+const { title, description = profile.tagline, path = "~" } = Astro.props;
+const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name}: ${profile.role}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const here = Astro.url.pathname;
+const nav = [
+  ["/", "home"],
+  ["/blog/", "blog"],
+  ["/projects/", "projects"],
+  ["/about/", "about"],
+];
+const isActive = (href: string) => (href === "/" ? here === "/" : here.startsWith(href));
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${profile.name}'s blog`} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0b0f14" />
+    <script is:inline>
+      try {
+        const t = localStorage.getItem("theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="term">
+      <div class="titlebar" aria-hidden="true">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="title">{profile.handle}@{profile.host}: {path}</span>
+      </div>
+      <nav class="cmds" aria-label="Main">
+        {nav.map(([href, label]) => (
+          <a href={href} aria-current={isActive(href) ? "page" : undefined}>{label}</a>
+        ))}
+      </nav>
+      <main id="main">
+        <slot />
+      </main>
+      <footer class="status">
+        <span><span class="ok">● 200 OK</span> · {profile.name} · © {new Date().getFullYear()}</span>
+        <span>press <kbd>:</kbd> for commands · <a href="/rss.xml">rss</a></span>
+      </footer>
+    </div>
+    <Palette />
+  </body>
+</html>
