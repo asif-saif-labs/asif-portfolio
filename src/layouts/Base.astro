@@ -17,7 +17,6 @@ const here = Astro.url.pathname;
 const nav = [
   ["/", "home"],
   ["/blog/", "blog"],
-  ["/projects/", "projects"],
   ["/about/", "about"],
 ];
 const isActive = (href: string) => (href === "/" ? here === "/" : here.startsWith(href));
@@ -62,7 +61,7 @@ const isActive = (href: string) => (href === "/" ? here === "/" : here.startsWit
       </main>
       <footer class="status">
         <span><span class="ok">● 200 OK</span> · {profile.name} · © {new Date().getFullYear()}</span>
-        <span>press <kbd>:</kbd> for commands · <a href="/rss.xml">rss</a></span>
+        <span>press <kbd>:</kbd> for commands · <a href="/rss.xml">rss</a> · <a href="https://github.com/asif-saif-labs/asif-portfolio">source</a></span>
       </footer>
     </div>
     <Palette />

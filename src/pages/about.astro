@@ -64,6 +64,13 @@ import { education, experience, profile, skills, stats } from "../data/profile";
     ))}
   </div>
 
+  <Prompt as="h2" path="~/asif-portfolio" cmd="cat README.md | head -3" />
+  <div class="out">
+    <p style="margin:0">This site is static HTML built with Astro, served from a private S3 bucket through CloudFront.</p>
+    <p style="margin:0">The infrastructure is Terraform; every merge to main deploys from GitHub Actions with keyless OIDC.</p>
+    <p style="margin:0"><a href="https://github.com/asif-saif-labs/asif-portfolio">→ source on GitHub</a></p>
+  </div>
+
   <Prompt as="h2" path="~" cmd="curl -s asif/contact" />
   <div class="out" id="contact">
     <pre style="margin:0;white-space:pre-wrap">{`{

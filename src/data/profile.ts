@@ -80,7 +80,7 @@ export const education = [
     years: "2024 – 2026",
     title: "M.Tech, Computing Systems and Infrastructure",
     org: "BITS Pilani",
-    note: "Dissertation: automated detection, classification and remediation of infrastructure drift in IaC, with an advisory AI layer.",
+    note: "Dissertation: automated detection, classification and remediation of infrastructure drift in IaC. A Python engine reads Terraform refresh-only plans, classifies each drift and routes it to an automatic tag fix or human approval; an optional AI layer (Amazon Bedrock) may only raise severity and only sees redacted data. Evaluated on 15 drifts injected into live AWS: 15/15 detected, 0 false positives.",
   },
   {
     years: "2015 – 2019",
