@@ -2,7 +2,7 @@
 // product names out of this file.
 
 export const profile = {
-  name: "Asif Khan",
+  name: "Asif Ali Khan",
   handle: "asif",
   host: "aslabs",
   role: "Senior DevOps Engineer",
