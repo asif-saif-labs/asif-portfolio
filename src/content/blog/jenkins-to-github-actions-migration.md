@@ -3,7 +3,7 @@ title: "Moving an organisation from Jenkins to GitHub Actions"
 description: "Years of Groovy pipelines, then a move to GitHub Actions: inventory first, reusable workflows, OIDC instead of secrets, and runners on EKS."
 date: 2026-11-22
 tags: [github-actions, jenkins, ci-cd, oidc, migration]
-draft: true
+draft: false
 ---
 
 For most of my time at work, CI/CD meant Jenkins. Groovy pipelines, Job DSL

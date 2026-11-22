@@ -3,7 +3,7 @@ title: "Faster CI with content-addressed Docker dependency layers"
 description: "Build dependencies into their own image, tag it with a hash of the lockfiles, and only rebuild it when that hash changes."
 date: 2026-11-22
 tags: [docker, ci-cd, github-actions, gke]
-draft: true
+draft: false
 ---
 
 At work, CI on several frontend and backend repos repeated the same step on

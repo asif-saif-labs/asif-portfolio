@@ -3,7 +3,7 @@ title: "Running an LLM gateway and observability for internal AI products"
 description: "Why internal AI products at work call models through a LiteLLM gateway, how Langfuse traces them, and what keeps provider keys out of apps."
 date: 2026-11-22
 tags: [llm, litellm, langfuse, gke, security]
-draft: true
+draft: false
 ---
 
 Since 2022, I've been running the infrastructure behind internal AI products

@@ -3,7 +3,7 @@ title: "One Redis setting, a 16-hour outage: a blameless RCA"
 description: "A Django service on ECS was down for about 16 hours because Redis had no password and the deployment circuit breaker was off. What happened and what we changed."
 date: 2026-11-22
 tags: [aws, ecs, django, redis, incident-response]
-draft: true
+draft: false
 ---
 
 A production Django service on ECS was down for roughly 16 hours, overnight

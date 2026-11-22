@@ -3,7 +3,7 @@ title: "Self-hosted GitHub Actions runners on EKS with Actions Runner Controller
 description: "How I run GitHub Actions runners on EKS with ARC runner scale sets: Helm charts, sized runner classes, scale to zero, container modes and IAM."
 date: 2026-11-22
 tags: [github-actions, kubernetes, eks, arc, ci-cd]
-draft: true
+draft: false
 ---
 
 When we moved CI from Jenkins to GitHub Actions at work, GitHub-hosted runners

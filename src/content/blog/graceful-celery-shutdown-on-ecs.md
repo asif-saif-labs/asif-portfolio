@@ -3,7 +3,7 @@ title: "Graceful Celery worker shutdown on ECS deployments"
 description: "Deploys were killing in-flight Celery tasks. A longer stopTimeout, ECS task scale-in protection and draining before deploys fixed it."
 date: 2026-11-22
 tags: [aws, ecs, celery, python, deployments]
-draft: true
+draft: false
 ---
 
 At work, a Django backend runs its background jobs on Celery workers in ECS.

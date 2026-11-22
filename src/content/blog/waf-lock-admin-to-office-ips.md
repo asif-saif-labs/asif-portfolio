@@ -3,7 +3,7 @@ title: "Locking Django /admin to office IPs with AWS WAF, while the API stays pu
 description: "A WAF v2 rule that blocks /admin from outside the office, survives /ADMIN/ and /%61dmin/, and leaves the public API alone."
 date: 2026-11-22
 tags: [aws, waf, django, cloudfront, terraform]
-draft: true
+draft: false
 ---
 
 At work, a production Django backend serves a public API to a browser app, and
