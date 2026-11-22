@@ -15,7 +15,7 @@ history. This blog is where it goes instead.
   commands that actually worked.
 - **Terraform and AWS patterns** I use day to day.
 - **Cost write-ups.** What things cost, and what made them cheaper.
-- **Build in public.** The apps my brother and I are building, from the first
+- **Build in public.** The side projects I'm building, from the first
   `terraform apply` onwards.
 
 ## How this site runs

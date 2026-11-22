@@ -1,35 +1,79 @@
 ---
 import Base from "../layouts/Base.astro";
 import Prompt from "../components/Prompt.astro";
-import { experience, profile, skills } from "../data/profile";
+import { education, experience, profile, skills, stats } from "../data/profile";
 ---
-<Base title="About" description={`About ${profile.name}`} path="~/about">
+<Base title="About" description={`About ${profile.name}: ${profile.role}, ${profile.location}`} path="~/about">
   <Prompt as="h1" path="~" cmd="cat about.md" />
   <div class="out">
-    {profile.bio.map((p) => <p style="margin:0 0 8px">{p}</p>)}
+    {profile.bio.map((p) => <p style="margin:0 0 10px">{p}</p>)}
   </div>
 
-  <Prompt as="h2" path="~/career" cmd="git log --oneline --graph" />
+  <Prompt as="h2" path="~" cmd="cat /proc/career" />
+  <div class="out scroll">
+    <table class="tbl">
+      <tbody>
+        {stats.map(([k, v]) => (
+          <tr><td class="muted nowrap">{k}</td><td class="amber">{v}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <Prompt as="h2" path="~/career" cmd="git log --graph --format=role" />
   <div class="out">
-    {experience.map((e, i) => (
-      <p style="margin:0">
-        <span class="red">*</span> <span class="amber">{e.year}</span>{" "}
-        <span class="green">{e.role}</span> <span class="muted">@</span> {e.org}
-        <br /><span class="muted">{i < experience.length - 1 ? "|" : " "}   {e.note}</span>
-      </p>
+    {experience.map((r, i) => (
+      <div style="margin:0 0 14px">
+        <div>
+          <span class="red">*</span> <span class="amber">{r.years}</span>{" "}
+          <span class="green">{r.title}</span> <span class="muted">@</span> {r.org}
+        </div>
+        <ul style="margin:4px 0 0;padding-left:0;list-style:none">
+          {r.highlights.map((h) => (
+            <li style="display:flex;gap:8px">
+              <span class="muted" aria-hidden="true">{i < experience.length - 1 ? "|" : " "}</span>
+              <span>{h}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <Prompt as="h2" path="~/education" cmd="ls -l" />
+  <div class="out">
+    {education.map((e) => (
+      <div style="margin:0 0 10px">
+        <span class="amber">{e.years}</span> <span class="green">{e.title}</span>{" "}
+        <span class="muted">@</span> {e.org}
+        {e.note && <div class="muted" style="font-size:13px">{e.note}</div>}
+      </div>
     ))}
   </div>
 
   <Prompt as="h2" path="~/skills" cmd="terraform state list" />
   <div class="out">
-    {Object.entries(skills).flatMap(([group, items]) =>
-      items.map((s) => <div><span class="muted">module.{group}.</span><span class="cyan">{s}</span></div>)
-    )}
+    {Object.entries(skills).map(([group, items]) => (
+      <div style="margin:0 0 6px">
+        {items.map((s, i) => (
+          <span style="white-space:nowrap">
+            <span class="muted">module.{group}.</span><span class="cyan">{s}</span>{i < items.length - 1 ? "  " : ""}
+          </span>
+        ))}
+      </div>
+    ))}
+  </div>
+
+  <Prompt as="h2" path="~/asif-portfolio" cmd="cat README.md | head -3" />
+  <div class="out">
+    <p style="margin:0">This site is static HTML built with Astro, served from a private S3 bucket through CloudFront.</p>
+    <p style="margin:0">The infrastructure is Terraform; every merge to main deploys from GitHub Actions with keyless OIDC.</p>
+    <p style="margin:0"><a href="https://github.com/asif-saif-labs/asif-portfolio">→ source on GitHub</a></p>
   </div>
 
   <Prompt as="h2" path="~" cmd="curl -s asif/contact" />
   <div class="out" id="contact">
-    <pre style="margin:0">{`{
+    <pre style="margin:0;white-space:pre-wrap">{`{
   "email":    "`}<a href={`mailto:${profile.links.email}`}>{profile.links.email}</a>{`",
   "github":   "`}<a href={profile.links.github}>{profile.links.github}</a>{`",
   "linkedin": "`}<a href={profile.links.linkedin}>{profile.links.linkedin}</a>{`"

@@ -14,12 +14,12 @@
   const input = dialog.querySelector<HTMLInputElement>("input")!;
   const log = dialog.querySelector<HTMLPreElement>(".log")!;
 
-  const pages: Record<string, string> = { "~": "/", home: "/", blog: "/blog/", projects: "/projects/", about: "/about/", rss: "/rss.xml" };
+  const pages: Record<string, string> = { "~": "/", home: "/", blog: "/blog/", about: "/about/", rss: "/rss.xml" };
 
   const help = [
     "help              this list",
     "ls                list pages",
-    "cd <page>         go to a page (home, blog, projects, about)",
+    "cd <page>         go to a page (home, blog, about)",
     "theme light|dark  switch theme",
     "whoami            who is this",
     "sudo hire-me      ;)",

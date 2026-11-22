@@ -19,14 +19,13 @@ const banner = String.raw`
   <Prompt as="h1" cmd="whoami" />
   <div class="out">
     <p style="margin:0"><span class="amber">{profile.name}</span> · {profile.role} · {profile.location}</p>
-    <p style="margin:0" class="muted">{profile.tagline}</p>
+    <p style="margin:0" class="green">{profile.tagline}</p>
+    <p style="margin:8px 0 0">{profile.summary}</p>
   </div>
 
   <Prompt cmd="cat ~/.status" />
   <div class="out">
-    <p style="margin:0"><span class="green">building</span>   fintrack, aslabs-infra and this site, with my brother</p>
-    <p style="margin:0"><span class="green">writing</span>    a DevOps post every week</p>
-    <p style="margin:0"><span class="green">learning</span>   whatever breaks next</p>
+    <p style="margin:0"><span class="green">working</span>    AI platform infrastructure on AWS and GCP</p>
   </div>
 
   <Prompt cmd="ls -lt ~/blog | head -5" />

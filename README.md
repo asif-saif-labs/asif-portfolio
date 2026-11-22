@@ -20,8 +20,7 @@ docker run --rm -it -v "$PWD":/app -w /app -p 4321:4321 node:22-alpine \
   sh -c "npm install && npx astro dev --host"
 ```
 
-- Personal details: `src/data/profile.ts` (replace the `TODO`s).
-- Projects table: `src/data/projects.ts`.
+- Personal details, experience, education, skills: `src/data/profile.ts`.
 - New post: `src/content/blog/<slug>.md` with `title`, `description`, `date`,
   `tags` (set `draft: true` to hide it from the built site).
 
@@ -44,7 +43,6 @@ Deploy assumes an AWS role through GitHub OIDC, allowed only for this repo's
 - Pages read like commands:
   - Home: `asif@aslabs:~$ whoami` with an ASCII banner and a blinking cursor.
   - Blog: `ls -lt ~/blog` (date, read time, tags as `--tag=terraform`).
-  - Projects: `kubectl get projects -o wide` style table, with status pills.
   - Experience: `git log --oneline --graph` timeline.
   - Skills: `terraform state list` style.
   - Contact: `curl -X POST asif/contact` (links, no form to spam).
@@ -107,7 +105,6 @@ and the build-in-public story of these apps (fintrack, aslabs-infra).
 - `/uses`: your setup (Mac, terminal, tools).
 - `/til`: short "today I learned" notes, lower effort than full posts.
 - `/runbooks`: public versions of useful runbooks and cheat sheets.
-- `/projects`: the aslabs apps, with live links as they ship.
 - Resume: a downloadable PDF, generated from the same content.
 - Talks/certifications, and later a newsletter from the RSS feed.
 
@@ -115,7 +112,7 @@ and the build-in-public story of these apps (fintrack, aslabs-infra).
 
 | # | What |
 |---|---|
-| 1 | Astro site: terminal theme, home, blog (2 sample posts), projects, about, 404, RSS |
+| 1 | Astro site: terminal theme, home, blog (2 sample posts), about, 404, RSS |
 | 2 | Infra in `aslabs-infra/apps/portfolio`, GitHub Actions deploy via OIDC |
 | 3 | Live on CloudFront URL, then `asif.aslabs.co.in` once DNS is on Route 53 |
 | 4 | First real weekly post; optional comments and analytics |
