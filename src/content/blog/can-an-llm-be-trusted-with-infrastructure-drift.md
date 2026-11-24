@@ -9,8 +9,10 @@ draft: false
 For my M.Tech dissertation at BITS Pilani I built a tool that detects
 infrastructure drift in AWS, decides how serious it is, and either fixes it or
 asks a human. The obvious question from everyone was: why not let an LLM make
-the call? I added one, gave it hard limits, and measured what it did. The
-limits turned out to be the most important part.
+the call? I added one, gave it hard limits, and measured what it did against
+drift injected into live AWS. The model I could test was a small local one
+(`qwen2.5:3b`), not a frontier model, and that matters for how far the numbers
+go. The limits turned out to be the most important part.
 
 ## What the tool does
 
@@ -125,26 +127,49 @@ Bedrock wasn't available: my AWS account was new, and its model access was
 restricted. So I ran the AI layer with a small local model, `qwen2.5:3b`
 through Ollama, using the same redaction, schema and decision code.
 
-Across the 25 actionable events in the live plans:
+The 15 scenarios produced **25 actionable events**: the detector emits one
+event per changed attribute, so one scenario can produce several. Across those
+25:
 
 - **25 / 25** structured outputs were valid.
-- The model **under-rated 17 of 25** events. That included S3 public access
-  block changes, which the rules rate critical, rated low.
+- The model **under-rated 17 of 25** events. That included all 4 S3 public
+  access block changes, which the rules rate critical; the model rated them
+  low.
 - It rated **0** events higher than the rules.
 - The escalate-only rule blocked all 17, so the AI changed **0** final
   decisions.
-- **0** account IDs, bucket names or tag values appeared in what was sent.
+- I checked the payloads for account IDs, bucket names and tag values, and
+  **0** of each appeared in what was sent. That covers the identifier types I
+  measured; it isn't proof that nothing else could leak.
 
-Used on its own, the model would have treated a public bucket as low
-priority. The output was well-formed and wrong; valid JSON tells you nothing
-about whether the judgement is right.
+Used on its own, the model would have treated a disabled S3 public access
+block as low priority. That doesn't make a bucket public by itself (the bucket
+policy and account-level settings still apply), but it removes the main guard
+against one going public, which is why the rules rate it critical. The output
+was well-formed and wrong; valid JSON tells you nothing about whether the
+judgement is right.
 
-A larger model would probably agree with the rules more often, but a guardrail that only holds
-when the model is good isn't a guardrail.
+These numbers are for one small model on 25 events. A larger model would
+probably agree with the rules more often, but a guardrail that only holds when
+the model is good isn't a guardrail.
 
 One early run happened before the model had loaded. Every event came back
 with an error status, and the system still produced the full rules-only
 result. It has no hard dependency on the AI.
+
+## What escalate-only doesn't solve
+
+Escalate-only stops one class of failure: the model making something less
+safe. It doesn't stop the opposite. A model that escalates too often sends
+harmless tag changes to a human and fills the approval queue, and an
+approval queue people learn to click through is its own risk.
+
+In this run the model escalated nothing, so that cost was zero. With another
+model it might not be. The design limits it in two ways: an escalation needs a
+confidence of at least 0.7, and every AI suggestion is recorded next to the
+rule's verdict. In production I'd also track the escalation rate and how often
+reviewers overturn it, and treat a rising rate as a reason to change the model
+or the threshold.
 
 ## Takeaways
 
@@ -154,7 +179,8 @@ it.
 - **Keep the authority deterministic.** Terraform owns the diff, rules own
   the decision. The model is an extra opinion.
 - **Make it escalate-only.** A model that can only make things stricter can
-  be wrong without causing harm.
+  be wrong without making anything less safe. Its mistakes cost reviewer
+  time instead, so watch the escalation rate.
 - **Never give it the keys.** No tools, no credentials, no path to
   remediation.
 - **Send it the least data.** One redacted change, no identifiers, no free
@@ -162,4 +188,5 @@ it.
 - **Treat infrastructure metadata as untrusted input.** Tags and descriptions
   are where prompt injection lives.
 - **Fail closed to rules.** Timeouts and bad output should change nothing.
-- **Be honest about your evaluation.** If you tuned on the test set, say so.
+- **Be honest about your evaluation.** Name the model you tested, say how
+  many events the numbers come from, and if you tuned on the test set, say so.
