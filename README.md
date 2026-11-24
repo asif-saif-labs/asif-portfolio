@@ -24,6 +24,29 @@ docker run --rm -it -v "$PWD":/app -w /app -p 4321:4321 node:22-alpine \
 - New post: `src/content/blog/<slug>.md` with `title`, `description`, `date`,
   `tags` (set `draft: true` to hide it from the built site).
 
+## Sharing a post on LinkedIn
+
+On demand, with a preview, nothing automatic. No LinkedIn app or token.
+
+```bash
+npm run linkedin                      # list published posts (and which were shared)
+npm run linkedin -- <post-slug>       # draft -> edit -> preview -> open composer
+npm run linkedin -- <post-slug> --print   # just print the draft
+```
+
+1. Builds a draft from the post's description, link and tags (as hashtags) in
+   `linkedin-drafts/<slug>.txt` (gitignored) and opens it in VS Code
+   (`code --wait`; override with `LINKEDIN_EDITOR`). Fill in the takeaways, save, close.
+2. Prints the final text with a character count (LinkedIn limit 3,000) and warns
+   about empty bullets. Refuses posts marked `draft: true` or not yet live on the site.
+3. On `y`, opens LinkedIn's "Start a post" box with the text filled in, and copies
+   it to the clipboard in case the composer opens empty. **The composer is the
+   preview:** check the text and link card, then click Post yourself.
+4. Optionally records the share in `linkedin-drafts/shared.json`.
+
+Check a post's link card (title, description, image) with LinkedIn's
+[Post Inspector](https://www.linkedin.com/post-inspector/).
+
 ## CI/CD
 
 | Workflow | When | What |
